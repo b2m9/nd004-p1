@@ -6,17 +6,15 @@ import csv
 # Credits to Adarsh Nair, adarsh0806: https://github.com/adarsh0806
 # Source: https://github.com/adarsh0806/ud036_StarterCode
 
-# Styles and scripting for the page
-main_page_head = ""
 
-# The main page layout and title bar
-main_page_content = ""
-
-# A single movie entry html template
-movie_tile_content = ""
+class Movie:
+    def __init__(self, title, img, trailer):
+        self.title = title
+        self.img = img
+        self.trailer = trailer
 
 
-def create_movie_tiles_content(movies):
+def create_movie_tiles_content(movies: list) -> str:
     # The HTML content for this section of the page
     content = ''
     for movie in movies:
@@ -25,19 +23,21 @@ def create_movie_tiles_content(movies):
             r'(?<=v=)[^&#]+', movie.trailer)
         youtube_id_match = youtube_id_match or re.search(
             r'(?<=be/)[^&#]+', movie.trailer)
+
         trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
                               else None)
 
         # Append the tile for the movie with its content filled in
         content += movie_tile_content.format(
-            movie_title=movie.title,
-            poster_image_url=movie.img,
-            trailer_youtube_id=trailer_youtube_id
+            title=movie.title,
+            image_url=movie.img,
+            trailer_id=trailer_youtube_id
         )
+
     return content
 
 
-def open_movies_page(movies):
+def open_movies_page(movies: list) -> None:
     # Create or overwrite the output file
     output_file = open('dist/fresh_tomatoes.html', 'w')
 
@@ -54,5 +54,36 @@ def open_movies_page(movies):
     webbrowser.open('file://' + url, new=2)
 
 
-def parse_template(name: str):
+def parse_template(path: str) -> str:
+    template = ""
 
+    with open(path) as file:
+        for line in file.readlines():
+            template = template + line
+
+    return template
+
+
+def get_movies(path: str) -> list:
+    movies = []
+
+    with open(path) as file:
+        for line in csv.DictReader(file):
+            movies.append(Movie(line["title"],
+                                line["img_url"],
+                                line["trailer_url"]))
+
+    return movies
+
+
+if __name__ == "__main__":
+    # Styles and scripting for the page
+    main_page_head = parse_template("templates/header.html")
+
+    # The main page layout and title bar
+    main_page_content = parse_template("templates/body.html")
+
+    # A single movie entry html template
+    movie_tile_content = parse_template("templates/movie.html")
+
+    open_movies_page(get_movies("data/movies.csv"))
