@@ -8,6 +8,7 @@ import csv
 
 
 class Movie:
+    """Simple data structure to model a `Movie`."""
     def __init__(self, title, img, trailer):
         self.title = title
         self.img = img
@@ -15,6 +16,8 @@ class Movie:
 
 
 def create_movie_tiles_content(movies: list) -> str:
+    """Creates HTML snippet for each entry in given list of `movies`.
+    Returns snippet as `str`."""
     # The HTML content for this section of the page
     content = ''
     for movie in movies:
@@ -38,6 +41,7 @@ def create_movie_tiles_content(movies: list) -> str:
 
 
 def open_movies_page(movies: list) -> None:
+    """Create movie page out of given list of `movies`. Returns `None`."""
     # Create or overwrite the output file
     output_file = open('dist/fresh_tomatoes.html', 'w')
 
@@ -55,6 +59,7 @@ def open_movies_page(movies: list) -> None:
 
 
 def parse_template(path: str) -> str:
+    """Parse given html file via `path` and return it as `str`."""
     template = ""
 
     with open(path) as file:
@@ -65,6 +70,7 @@ def parse_template(path: str) -> str:
 
 
 def get_movies(path: str) -> list:
+    """Parse given csv file via `path` to list of instances of `Movie`."""
     movies = []
 
     with open(path) as file:
