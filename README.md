@@ -1,5 +1,7 @@
 # Udacity: Movie trailer website
 
+This repo is part of Udacity's nd004 course.
+
 Five biggest box office flops in movie history according to some random
 website on the web. Have fun.
 
